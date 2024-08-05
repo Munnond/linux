@@ -73,7 +73,8 @@ int main() {
     if (pid == 0) {
         // Child process (server)
         server(pipe2, pipe1);
-    } else {
+    } 
+    else {
         // Parent process (client)
         client(pipe2, pipe1);
         wait(NULL); // Wait for the child process to finish
@@ -82,3 +83,5 @@ int main() {
 
     return 0;
 }
+
+// pipe1 used for sending file contents and pipe2 is used for sending a file name

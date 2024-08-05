@@ -101,7 +101,8 @@ int main() {
     if (pid == 0) {
         // Child process (server)
         server();
-    } else {
+    } 
+    else {
         // Parent process (client)
         client();
         wait(NULL); // Wait for the child process to finish
@@ -114,3 +115,11 @@ int main() {
 
     return 0;
 }
+
+// Client:
+//     Sends the file name to the server through FIFO2.
+//     Reads the file contents from FIFO1 and displays them.
+
+// Server:
+//     Receives the file name from FIFO2.
+//     Opens the specified file, reads its contents, and sends them to the client through FIFO1.
