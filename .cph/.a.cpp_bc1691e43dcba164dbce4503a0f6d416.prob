@@ -1,1 +1,0 @@
-{"name":"Local: a","url":"/home/nisarg/Desktop/OS/Linux_Programing/a.cpp","tests":[{"id":1723022590058,"input":"5\n3 8 2 6\n1 1 1 1\n10 10 2 2\n1 1 10 10\n3 8 7 2\n","output":"\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/nisarg/Desktop/OS/Linux_Programing/a.cpp","group":"local","local":true}
