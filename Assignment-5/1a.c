@@ -20,7 +20,7 @@ int main()
     printf("Part(a):\n\n");
 
     for(int i=0;i<5;i++){
-        key_t key = ftok("/home/user/Desktop/23114073",i+1);
+        key_t key = ftok("/home/nisarg/Desktop/OS/Linux_Programing/Assignment-5",i+1);
         if(key==-1){
             return 1;
         }

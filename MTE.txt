@@ -1,0 +1,98 @@
+Assignment-1
+Q1:
+    (1)DIR* DirStream = opendir(Start);:to open the directory specified by the user. opendir returns a pointer to a DIR structure (representing the directory stream). If the directory can't be opened (e.g., it doesn't exist), opendir returns NULL.
+    (2)CurrDir = readdir(DirStream);: This function reads the next entry in the directory stream and returns a pointer to a dirent structure representing that entry. If there are no more entries, it returns NULL.
+Q2:
+    (3)#include <sys/types.h>: Defines data types used in system calls.
+    (4)#include <dirent.h>: Provides structures and functions for working with directories.
+    (5)#include <sys/stat.h>: Provides structures and functions for retrieving file status information.
+    (6)#include <unistd.h>: Provides access to the POSIX operating system API.
+    (7)int main(int argc, char *argv[]): The program starts here. argc is the number of command-line arguments, and argv is an array of strings representing those arguments.
+Q3:
+    (8)Process id is obtain by 'getpid()' function which is changing after time as processor assign value to it which is changes as time changes
+
+Q4:
+    (9)Process ID's of parent and child process are different
+
+Assignment-2
+Q1:
+    (1)Key Differences Between fork() and vfork():
+        Memory Sharing:
+            fork(): When you use fork(), the operating system creates a new process by copying the entire address space of the parent process. This means the child process gets its own copy of the parent's memory space, including variables like count. Changes made by the child to count do not affect the parent's count.
+
+            vfork(): Unlike fork(), vfork() does not create a separate memory space for the child process. Instead, the child process shares the parent's memory space. As a result, if the child modifies a variable like count, this change is reflected in the parent as well.
+        
+
+        Execution Order:
+
+            fork(): The parent and child processes run independently after the fork(), and the order in which they run is non-deterministic. This can lead to different outputs depending on the scheduling.
+            
+            vfork(): The child process runs first, and the parent is suspended until the child either calls _exit() or exec(). This ensures that the child completes its execution before the parent resumes.
+    (2)
+        ->fork() creates a separate memory space for the child, so changes made by the child do not affect the parent.
+        ->vfork() shares the memory space between parent and child, so changes made by the child are visible to the parent.
+        ->This difference explains why the count variable is different when using vfork() instead of fork().
+
+Q2:
+    (3)#include <unistd.h>: For POSIX API functions like fork and getpid
+    (4)#include <sys/wait.h>: For process-related functions like waitpid
+    (5)#include <signal.h>: For signal-handling functions.
+    (6)
+        Signal Handling: The SIGCHLD signal is used to notify the parent when a child process terminates, and the signalhand function processes these terminations.
+        waitpid with WNOHANG: This is used in the signal handler to avoid blocking if no child processes have terminated.
+        Process Creation: The program forks multiple child processes in a loop, and each child exits with a unique exit status.
+        This setup is useful for managing child processes in scenarios where you don’t want to block the parent process while waiting for child processes to terminate.
+
+Q3:
+    (7)
+        Signal Handling (SIGALRM): The SIGALRM signal is sent when the timer set by alarm() expires. Each child sets an alarm for i seconds, where i is its index in the loop.
+        Global Variable Issue: Since i is a global variable, its value in the signal handler reflects the last value assigned in the loop (which would be 5 for all processes). This is a problem because all child processes will print the same value of i, which is not their actual exit status.
+        Infinite Loop: The for(;;); infinite loop in each child process keeps it alive until the alarm signal is received and handled. This loop prevents the child from terminating prematurely.
+        Parent Process: The parent process does not wait for child processes to terminate; it simply sleeps for a while to allow the children to handle their alarms.
+        Summary:The program is intended to create several child processes, each of which sets an alarm and then waits indefinitely. When the alarm expires, the child process's signal handler is triggered, printing the process's PID and the exit status. However, due to the global variable i, all children will print the same exit status (5) when the alarm triggers. This is a logical issue in the program that could be corrected by passing the value of i in a way that is local to each child process.
+
+Q4:
+    (8)Key Points:
+        Signal Handling (SIGALRM): The SIGALRM signal is used to notify the child process when its timer expires. The signal handler prints the child's termination message.
+        Resource Usage (getrusage): The getrusage() function tracks CPU time spent by the parent and its child processes. This information is useful for performance analysis.
+        Process Synchronization: The parent process waits for all child processes to finish before printing resource usage. This ensures that all relevant resource usage is accounted for.
+        Global Variable Issue: The global variable i is shared between the parent and child processes, which may lead to misleading output in the signal handler.
+        Summary:
+        The program creates several child processes, each of which sets an alarm, performs a short sleep, and then terminates. The parent process waits for all children to finish and then prints resource usage statistics for both itself and its children. This setup demonstrates how to handle signals, manage multiple processes, and track resource usage in a Unix-like environment. However, the use of the global variable i across both parent and child processes is a logical issue that could lead to incorrect information being printed in the signal handler.
+
+Assignment-3
+Q1
+    (1)Components of the Program
+        Pipes:
+            Two pipes are created: pipe1 and pipe2.
+            pipe2[]: Used by the parent (client) to send the file name to the child (server).
+            pipe1[]: Used by the child (server) to send the file content back to the parent (client).
+        
+        Client (Parent Process):
+            The client (parent process) takes the file name as input and sends it to the server (child process) via pipe2[].
+            It then reads the file content sent back by the server via pipe1[] and displays it on the screen.
+        
+        Server (Child Process):
+            The server (child process) receives the file name from pipe2[].
+            It attempts to open the file and read its contents.
+            If the file is successfully opened, it sends the content back to the client using pipe1[].
+    (2)Summary of Differences b/w fifo and pipe:
+        Visibility:
+            Pipes: Only exist in memory and are used for communication between related processes (e.g., parent and child).
+            FIFOs: Are visible in the filesystem and can be accessed by unrelated processes.
+        Lifetime:
+            Pipes: Exist only as long as the processes using them are alive.
+            FIFOs: Exist in the filesystem until explicitly removed.
+        Creation:
+            Pipes: Created with pipe().
+            FIFOs: Created with mkfifo().
+        Naming:
+            Pipes: Unnamed, referred to only by file descriptors.
+            FIFOs: Named, referred to by a path in the filesystem.
+        Use Case:
+            Pipes: Typically used for simple parent-child process communication.
+            FIFOs: Suitable for more complex communication scenarios between unrelated or independently running processes.
+
+Assignment-5
+
+(1)A message queue is a linked list of messages stored within the kernel and identified by a message queue identifier. Each message has a type and a body. Processes can send messages to or receive messages from a message queue, identified by a key, using system calls.

@@ -11,7 +11,7 @@ int main() {
 
     printf("Initial value of count: %d\n", count);
 
-    pid = vfork(); 
+    pid = fork(); 
     // change above to fork
 
     if (pid < 0) {
