@@ -28,10 +28,6 @@ int main()
         //create a message queue
         msgid = msgget(key,0666 | IPC_CREAT);
 
-        if(msgid==-1){
-            return 2;
-        }
-
         printf("Created message queue with id : %d\n",msgid);
 
         // delete the message queue

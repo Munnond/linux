@@ -28,10 +28,8 @@ int main() {
     pid_t pid;
 
     // Install signal handler for SIGUSR1
-    if (signal(SIGUSR1, signal_handler) == SIG_ERR) {
-        perror("signal");
-        exit(1);
-    }
+    signal(SIGUSR1, signal_handler);
+    
 
     if ((pid = fork()) < 0) {
         perror("fork");

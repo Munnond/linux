@@ -17,11 +17,7 @@ int main()
     message_buf msg_send;
     key= ftok("/tmp/1234", 65);
     msqid=msgget(key, 0666 | IPC_CREAT);
-    if(msqid == -1)
-    {
-        printf("msgget failed\n");
-        return -1;
-    } 
+
     printf("Enter Size:\n");
     scanf("%d", &size);
     printf("Enter you message : \n");

@@ -15,36 +15,17 @@ struct msg_buffer {
 };
 
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        fprintf(stderr, "Usage: %s <message_size> <message_type>\n", argv[0]);
-        exit(EXIT_FAILURE);
-    }
-
     int message_size = atoi(argv[1]);
     long message_type = atol(argv[2]);
     int msgid;
     key_t key;
     struct msg_buffer msg;
 
-    // Check if message_size is within valid bounds
-    if (message_size <= 0 || message_size > MESSAGE_SIZE) {
-        fprintf(stderr, "Invalid message size. Should be between 1 and %d bytes.\n", MESSAGE_SIZE);
-        exit(EXIT_FAILURE);
-    }
-
     // Generate a unique key based on the file path
-    key = ftok("/tmp/1234", 'a');
-    if (key == -1) {
-        perror("ftok");
-        exit(EXIT_FAILURE);
-    }
+    key = ftok("/tmp/1234",'a');
 
     // Create a message queue
-    msgid = msgget(key, 0666 | IPC_CREAT);
-    if (msgid == -1) {
-        perror("msgget");
-        exit(EXIT_FAILURE);
-    }
+    msgid = msgget(key,0666|IPC_CREAT);
 
     // Prepare the message
     msg.msg_type = message_type;
@@ -52,10 +33,7 @@ int main(int argc, char *argv[]) {
     msg.msg_text[message_size] = '\0'; // Null-terminate the message text
 
     // Place the message in the message queue
-    if (msgsnd(msgid, &msg, message_size, 0) == -1) {
-        perror("msgsnd");
-        exit(EXIT_FAILURE);
-    }
+    msgsnd(msgid, &msg,message_size, 0);
 
     printf("Message placed in queue with ID %d\n", msgid);
 

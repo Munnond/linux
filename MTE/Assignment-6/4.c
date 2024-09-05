@@ -26,11 +26,7 @@ int main() {
     close(fd);
     // Open "myfile" again and print the new file descriptor
     int new_fd = open("myfile", O_RDONLY);
-    if (new_fd == -1) {
-        perror("Error opening file after setuid/seteuid");
-        close(fd);
-        return 1;
-    }
+    
     printf("New file descriptor: %d\n", new_fd);
     close(new_fd);
 

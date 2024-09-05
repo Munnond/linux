@@ -17,10 +17,7 @@ int main()
     key= ftok("/tmp/1234", 65);
     msqid=msgget(key, 0666 | IPC_CREAT);
     int c;
-    if ((c=(msgrcv(msqid, &read_msg, strlen(read_msg.text), -99, 0))) < 0) {
-        perror("Can't Receive");
-        return 1;
-    }
+    c=(msgrcv(msqid, &read_msg, strlen(read_msg.text), -99, 0));
     read_msg.text[c]='\0';
     printf("Value of c %d\n", c);
     printf("Received Message : %s \n", read_msg.text);
